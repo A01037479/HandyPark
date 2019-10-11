@@ -31,6 +31,14 @@
             <!--        <requestFocus />-->
         </EditText>
 
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_gravity="center"
+            android:text="@string/btnSearch" />
+
     </FrameLayout>
 
 </RelativeLayout>
