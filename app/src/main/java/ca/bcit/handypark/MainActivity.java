@@ -25,8 +25,9 @@ public class MainActivity extends AppCompatActivity {
             EditText etDestination = findViewById(R.id.etDestination);
             String dest = etDestination.getText().toString();
             // Explicit intent
-            Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-            intent.putExtra("dest", "You searched for " + dest);
+            // Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            intent.putExtra("dest", dest);
             startActivity(intent);
         }
     };
