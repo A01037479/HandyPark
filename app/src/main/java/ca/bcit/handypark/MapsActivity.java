@@ -66,8 +66,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Address adr = addressList.get(0);
             latLng = new LatLng(adr.getLatitude(), adr.getLongitude());
 
-//            Toast toast = Toast.makeText(getApplicationContext(),"location not null",Toast.LENGTH_LONG);
-//            toast.show();
         }
 
         // East Side 500 Richards St
