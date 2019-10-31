@@ -28,8 +28,15 @@
             android:layout_gravity="center"
             android:hint="@string/etSearch"
             android:inputType="text">
+
             <!--        <requestFocus />-->
         </EditText>
+
+        <fragment
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:id="@+id/autocomplete_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btnSearch"
