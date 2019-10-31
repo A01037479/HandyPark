@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(btnLstnr);
 
+
         String apiKey = getString(R.string.google_maps_key);
 
         // Initialize the SDK
@@ -76,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         // TO DO -- Null pointer exception LINE 82 in MAIN ACTIVITY
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        f.setPlaceFields(Arrays.asList(Place.Field.ID,Place.Field.LAT_LNG,Place.Field.NAME));
+        f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
         f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Status status) {
-
+                Log.i(TAG, "An error occurred: " + status);
             }
         });
         parkingArrayList = new ArrayList<Parking>();
