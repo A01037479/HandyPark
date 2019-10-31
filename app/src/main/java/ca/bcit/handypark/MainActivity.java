@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     // To display book titles
     private ListView lv;
     // URL to get contacts JSON
-    private static String SERVICE_URL = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=disability-parking&rows=9999&facet=description&facet=notes&facet=geo_local_area";
-    // Stores list of books retrieved from API
-    private ArrayList<LatLng> latLngArrayList;
+    private static String SERVICE_URL = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=disability-parking&rows=10&facet=description&facet=notes&facet=geo_local_area";
+    private ArrayList<Parking> parkingArrayList;
+//    private ArrayList<LatLng> latLngArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        parkingArrayList = new ArrayList<Parking>();
+        new GetParking().execute();
+//        lv = findViewById(R.id.toonList);
+//        new GetContacts().execute();
 
     }
 
@@ -99,139 +103,111 @@ public class MainActivity extends AppCompatActivity {
             //Fragment f = getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
             //String s = f.getText().toString();
 
-            // Explicit intent
-            // Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-            intent.putExtra("dest", dest);
+            //Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            //intent.putExtra("dest", dest);
+
+            Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
+            Bundle args = new Bundle();
+            args.putSerializable("ARRAYLIST", parkingArrayList);
+            intent.putExtra("BUNDLE",args);
             startActivity(intent);
         }
     };
 
-//    /**
-//     * Async task class to get json by making HTTP call
-//     */
-//    private class GetLatLngs extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            // Showing progress dialog
-//            pDialog = new ProgressDialog(MainActivity.this);
-//            pDialog.setMessage("Please wait...");
-//            pDialog.setCancelable(false);
-//            pDialog.show();
-//
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... arg0) {
-//            HttpHandler sh = new HttpHandler();
-//            String jsonStr = null;
-//
-//            // Making a request to url and getting response
-//            jsonStr = sh.makeServiceCall(SERVICE_URL);
-//
-//            Log.e(TAG, "Response from url: " + jsonStr);
-//
-//            if (jsonStr != null) {
-//                try {
-//
-////                    fields: {
-////                        description: "Designated meter parking space",
-////                                notes: "No stopping accessible zone",
-////                                spaces: 1,
-////                                geom: {
-////                            type: "Point",
-////                                    coordinates: [
-////                            -123.069865,
-////                                    49.27218
-////]
-////                        },
-////                        location: "North Side 1600 Kitchener St",
-////                                geo_local_area: "Grandview-Woodland"
-////                    },
-//                    JSONObject jsonObj = new JSONObject(jsonStr);
-//                    JSONArray records = jsonObj.getJSONArray("records");
-//                    for (int i = 0; i < records.length(); i++) {
-//                        JSONObject f = records.getJSONObject(i).getJSONObject("fields");
-//                    }
-////                    JSONArray items = jsonObj.getJSONArray("items");
-////                    for (int i = 0; i < items.length(); i++) {
-////                        JSONObject b = items.getJSONObject(i).getJSONObject("volumeInfo");
-////                        String title = b.getString("title");
-////                        String thumbnail = b.getJSONObject("imageLinks").getString("smallThumbnail");
-//////                        String authors = b.getString("authors");
-////                        String authors = "";
-////                        JSONArray authorArray = b.getJSONArray("authors");
-//////                        authors = authorArray.join(", ");
-////                        String[] authorStr = new String[authorArray.length()];
-////                        for (int j = 0; j < authorStr.length; j++) {
-////                            authorStr[j] = authorArray.getString(j);
-////                        }
-////                        authors = TextUtils.join(", ", authorStr);
-////                        String publisher = b.getString("publisher");
-////                        String publishedDate = b.getString("publishedDate");
-////                        String desc = "";
-////                        if (b.has("description")) {
-////                            desc = b.getString("description");
-////                        }
-////                        String isbn = b.getJSONArray("industryIdentifiers").getJSONObject(1).getString("identifier");
-////
-////                        Book book = new Book();
-////                        book.setTitle(title);
-////                        book.setThumbnail(thumbnail);
-////                        book.setAuthors(authors);
-////                        book.setPublisher(publisher);
-////                        book.setPublishedDate(publishedDate);
-////                        book.setDescription(desc);
-////                        book.setIsbn(isbn);
-////
-////                        bookList.add(book);
-//                    //}
-//                } catch (final JSONException e) {
-//                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(getApplicationContext(),
-//                                    "Json parsing error: " + e.getMessage(),
-//                                    Toast.LENGTH_LONG)
-//                                    .show();
-//                        }
-//                    });
-//                }
-//            } else {
-//                Log.e(TAG, "Couldn't get json from server.");
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(getApplicationContext(),
-//                                "Couldn't get json from server. Check LogCat for possible errors!",
-//                                Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                });
-//
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            super.onPostExecute(result);
-//
-//            // Dismiss the progress dialog
-//            if (pDialog.isShowing())
-//                pDialog.dismiss();
-//
-//            //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
-//
-//            BookAdapter adapter = new BookAdapter(MainActivity.this, bookList);
-//
-//            // Attach the adapter to a ListView
+    /**
+     * Async task class to get json by making HTTP call
+     */
+    private class GetParking extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            String jsonStr = null;
+
+            jsonStr = sh.makeServiceCall(SERVICE_URL);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    JSONArray records = jsonObj.getJSONArray("records");
+                    for (int i = 0; i < records.length(); i++) {
+                        JSONObject f = records.getJSONObject(i).getJSONObject("fields");
+                        String description = f.getString("description");
+                        String notes = f.getString("notes");
+                        int spaces = f.getInt("spaces");
+                        JSONObject g = f.getJSONObject("geom");
+                        JSONArray jsonCoords = g.getJSONArray("coordinates");
+                        double[] coordinates = new double[2];
+                        coordinates[0] = jsonCoords.getDouble(1);
+                        coordinates[1] = jsonCoords.getDouble(0);
+                        String location = f.getString("location");
+                        String geoLocalArea = f.getString("geo_local_area");
+
+                        Parking parkingSpot = new Parking();
+                        parkingSpot.setDescription(description);
+                        parkingSpot.setNotes(notes);
+                        parkingSpot.setSpaces(spaces);
+                        parkingSpot.setCoordinates(coordinates);
+                        parkingSpot.setLocation(location);
+                        parkingSpot.setGeoLocalArea(geoLocalArea);
+
+                        parkingArrayList.add(parkingSpot);
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
+
+//            ParkingAdapter adapter = new ParkingAdapter(MainActivity.this, parkingArrayList);
+
+            // Attach the adapter to a ListView
 //            lv.setAdapter(adapter);
-//        }
-//    }
+        }
+    }
 
 }
