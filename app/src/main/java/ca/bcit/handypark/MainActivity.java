@@ -1,6 +1,9 @@
 package ca.bcit.handypark;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,9 +20,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,6 +60,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(btnLstnr);
+
+        // Initialize the SDK
+        if(!Places.isInitialized()){
+            Places.initialize(getApplicationContext(), "AIzaSyAiFeaOtV-cX_lmLqPQJmjtbZ0IgF7y2iI");
+        }
+
+        // Create a new Places client instance
+        PlacesClient placesClient = Places.createClient(this);
+
+        final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        f.setPlaceFields(Arrays.asList(Place.Field.ID,Place.Field.LAT_LNG,Place.Field.NAME));
+        f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                final LatLng latLng = place.getLatLng();
+                //Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
+
     }
 
     /**
@@ -60,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             EditText etDestination = findViewById(R.id.etDestination);
             String dest = etDestination.getText().toString();
+
+            //Fragment f = getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+            //String s = f.getText().toString();
+
             // Explicit intent
             // Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
