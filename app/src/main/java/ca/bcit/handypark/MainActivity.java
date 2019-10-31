@@ -61,9 +61,12 @@ public class MainActivity extends AppCompatActivity {
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(btnLstnr);
 
+
+        String apiKey = getString(R.string.google_maps_key);
+
         // Initialize the SDK
         if(!Places.isInitialized()){
-            Places.initialize(getApplicationContext(), "AIzaSyAiFeaOtV-cX_lmLqPQJmjtbZ0IgF7y2iI");
+            Places.initialize(getApplicationContext(), apiKey);
         }
 
         // Create a new Places client instance
@@ -71,17 +74,19 @@ public class MainActivity extends AppCompatActivity {
 
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        f.setPlaceFields(Arrays.asList(Place.Field.ID,Place.Field.LAT_LNG,Place.Field.NAME));
+        f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
         f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
                 //Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_LONG).show();
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
             }
 
             @Override
             public void onError(@NonNull Status status) {
-
+                Log.i(TAG, "An error occurred: " + status);
             }
         });
         parkingArrayList = new ArrayList<Parking>();
