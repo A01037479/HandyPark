@@ -61,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
         Button btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(btnLstnr);
 
+        String apiKey = getString(R.string.google_maps_key);
+
         // Initialize the SDK
         if(!Places.isInitialized()){
-            Places.initialize(getApplicationContext(), "AIzaSyAiFeaOtV-cX_lmLqPQJmjtbZ0IgF7y2iI");
+            Places.initialize(getApplicationContext(), apiKey);
         }
 
         // Create a new Places client instance
