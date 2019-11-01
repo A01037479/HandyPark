@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // TO DO -- Null pointer exception LINE 82 in MAIN ACTIVITY
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
 
         f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
