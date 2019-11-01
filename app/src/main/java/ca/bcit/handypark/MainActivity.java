@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     // URL to get contacts JSON
     private static String SERVICE_URL = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=disability-parking&rows=10&facet=description&facet=notes&facet=geo_local_area";
     private ArrayList<Parking> parkingArrayList;
+    private String destName;
+    private double[] destCoords = new double[2];
 //    private ArrayList<LatLng> latLngArrayList;
 
     @Override
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         // Create a new Places client instance
         PlacesClient placesClient = Places.createClient(this);
 
+        // TO DO -- Null pointer exception LINE 82 in MAIN ACTIVITY
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
@@ -79,9 +82,11 @@ public class MainActivity extends AppCompatActivity {
         f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                final LatLng latLng = place.getLatLng();
-                Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_LONG).show();
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                destCoords[0] = place.getLatLng().latitude;
+                destCoords[1] = place.getLatLng().longitude;
+                destName = place.getName();
+                Toast.makeText(MainActivity.this, destName + " " + destCoords, Toast.LENGTH_LONG).show();
+
             }
 
             @Override
@@ -102,20 +107,24 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener btnLstnr = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            EditText etDestination = findViewById(R.id.etDestination);
-            String dest = etDestination.getText().toString();
+//            EditText etDestination = findViewById(R.id.etDestination);
+//            String dest = etDestination.getText().toString();
 
             //Fragment f = getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
             //String s = f.getText().toString();
 
-            //Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-            //intent.putExtra("dest", dest);
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            intent.putExtra("destName", destName);
+            intent.putExtra("destCoords", destCoords);
 
-            Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
-            Bundle args = new Bundle();
-            args.putSerializable("ARRAYLIST", parkingArrayList);
-            intent.putExtra("BUNDLE",args);
-            startActivity(intent);
+
+            //TO PARKING DETAILS (JSON STUFF)
+            // J S O N
+//            Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
+//            Bundle args = new Bundle();
+//            args.putSerializable("ARRAYLIST", parkingArrayList);
+//            intent.putExtra("BUNDLE",args);
+//            startActivity(intent);
         }
     };
 
