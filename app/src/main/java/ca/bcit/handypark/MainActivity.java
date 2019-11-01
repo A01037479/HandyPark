@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
-                //Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_LONG).show();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
             }
 
