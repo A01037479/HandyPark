@@ -21,7 +21,8 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    String dest = "";
+    double[] destCoords;
+    String destName;
     double lat;
     double lng;
     LatLng latLng;
@@ -37,7 +38,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
-        dest = intent.getStringExtra("dest");
+        destName = intent.getStringExtra("destName");
+        destCoords = intent.getDoubleArrayExtra("destCoords");
+//        dest = intent.getStringExtra("dest");
     }
 
 
@@ -55,10 +58,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<Address> addressList = null;
         mMap = googleMap;
 
-        if (dest != null && dest != "") {
+        //TO DO
+        if (destName != null && destName != "") {
             Geocoder geocoder = new Geocoder(this);
             try {
-                addressList = geocoder.getFromLocationName(dest, 5);
+//                addressList = geocoder.getFromLocationName(destName, 5);
+                addressList = geocoder.getFromLocation(destCoords[0], destCoords[1], 5);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -79,17 +84,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // West Side 700 Hornby St
         LatLng parking5 = new LatLng(49.282822, -123.121647);
 
-        mMap.addMarker(new MarkerOptions().position(latLng).title(dest));
-        mMap.addMarker(new MarkerOptions().position(parking1).title("parking" + " 1")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking2).title("parking" + " 2")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking3).title("parking" + " 3")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking4).title("parking" + " 4")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking5).title("parking" + " 5")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mMap.addMarker(new MarkerOptions().position(latLng).title(destName));
+//        mMap.addMarker(new MarkerOptions().position(parking1).title("parking" + " 1")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//        mMap.addMarker(new MarkerOptions().position(parking2).title("parking" + " 2")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//        mMap.addMarker(new MarkerOptions().position(parking3).title("parking" + " 3")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//        mMap.addMarker(new MarkerOptions().position(parking4).title("parking" + " 4")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//        mMap.addMarker(new MarkerOptions().position(parking5).title("parking" + " 5")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14.0f));
     }
 }
