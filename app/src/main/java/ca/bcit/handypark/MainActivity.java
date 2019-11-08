@@ -74,13 +74,14 @@ public class MainActivity extends AppCompatActivity {
 
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
 
         f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
-                //Toast.makeText(MainActivity.this, ""+latLng.latitude, Toast.LENGTH_LONG).show();
+                final String placename = place.getName();
+                Toast.makeText(MainActivity.this, ""+placename, Toast.LENGTH_LONG).show();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
             }
 
