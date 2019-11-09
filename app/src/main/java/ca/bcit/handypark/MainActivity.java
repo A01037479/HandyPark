@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 destCoords[0] = place.getLatLng().latitude;
                 destCoords[1] = place.getLatLng().longitude;
                 destName = place.getName();
-                Toast.makeText(MainActivity.this, destName + " " + destCoords, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, destName + " " + destCoords[0]+destCoords[1], Toast.LENGTH_LONG).show();
 
             }
 
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 //            Bundle args = new Bundle();
 //            args.putSerializable("ARRAYLIST", parkingArrayList);
 //            intent.putExtra("BUNDLE",args);
-//            startActivity(intent);
+            startActivity(intent);
         }
     };
 
