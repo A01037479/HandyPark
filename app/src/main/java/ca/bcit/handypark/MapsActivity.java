@@ -1,8 +1,10 @@
 package ca.bcit.handypark;
 
+import androidx.constraintlayout.solver.widgets.Helper;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -14,18 +16,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    double[] destCoords;
+    double[] destCoords = new double[2];
     String destName;
-    double lat;
-    double lng;
     LatLng latLng;
+    ArrayList<Parking> parkingResults = new ArrayList<>();
+    Parking parking = null;
 
 
     @Override
@@ -37,10 +41,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Intent intent = getIntent();
-        destName = intent.getStringExtra("destName");
-        destCoords = intent.getDoubleArrayExtra("destCoords");
+//        destName = intent.getStringExtra("destName");
+//        destCoords = intent.getDoubleArrayExtra("destCoords");
 //        dest = intent.getStringExtra("dest");
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("BUNDLE");
+        parkingResults = (ArrayList<Parking>) bundle.getSerializable("ARRAYLIST");
+        destCoords = intent.getDoubleArrayExtra("DESTINATION");
+        int index = (Integer)intent.getExtras().get("INDEX");
+        parking = parkingResults.get(index);
+
+
+
+
+
+
+
     }
 
 
@@ -55,46 +72,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        List<Address> addressList = null;
         mMap = googleMap;
 
-        //TO DO
-        if (destName != null && destName != "") {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-//                addressList = geocoder.getFromLocationName(destName, 5);
-                addressList = geocoder.getFromLocation(destCoords[0], destCoords[1], 5);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        LatLng parkingLatLng = new LatLng(parking.getCoordinates()[0],parking.getCoordinates()[1]);
+        LatLng destinationLatLng = new LatLng(destCoords[0], destCoords[1]);
+        mMap.addMarker(new MarkerOptions().position(parkingLatLng).title(parking.getLocation())
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mMap.addMarker(new MarkerOptions().position(destinationLatLng).title("Destination")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-            Address adr = addressList.get(0);
-            latLng = new LatLng(adr.getLatitude(), adr.getLongitude());
+        List<LatLng> wayPoints = new ArrayList<>();
+        wayPoints.add(destinationLatLng);
+        wayPoints.add(parkingLatLng);
+        PolylineOptions polyOptions = new PolylineOptions();
+        polyOptions.color(Color.RED);
+        polyOptions.width(5);
+        polyOptions.addAll(wayPoints);
 
-        }
+        mMap.addPolyline(polyOptions);
 
-        // East Side 500 Richards St
-        LatLng parking1 = new LatLng(49.282943, -123.11344);
-        // East Side 1100 Burrard St
-        LatLng parking2 = new LatLng(49.279453, -123.128447);
-        // East Side 1100 Homer St
-        LatLng parking3 = new LatLng(49.2753257, -123.123063);
-        // South Side 100 W Cordova St
-        LatLng parking4 = new LatLng(49.2831648, -123.108411);
-        // West Side 700 Hornby St
-        LatLng parking5 = new LatLng(49.282822, -123.121647);
 
-        mMap.addMarker(new MarkerOptions().position(latLng).title(destName));
-//        mMap.addMarker(new MarkerOptions().position(parking1).title("parking" + " 1")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-//        mMap.addMarker(new MarkerOptions().position(parking2).title("parking" + " 2")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-//        mMap.addMarker(new MarkerOptions().position(parking3).title("parking" + " 3")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-//        mMap.addMarker(new MarkerOptions().position(parking4).title("parking" + " 4")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-//        mMap.addMarker(new MarkerOptions().position(parking5).title("parking" + " 5")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14.0f));
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, 16.0f));
     }
+
 }

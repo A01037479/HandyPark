@@ -6,36 +6,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ParkingDetails">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
 
-    <ScrollView
-        android:layout_margin="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<!--            <TextView-->
+<!--                android:id="@+id/text"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="TextView"-->
+<!--                android:textSize="20sp"-->
+<!--                tools:layout_editor_absoluteX="94dp"-->
+<!--                    tools:layout_editor_absoluteY="337dp" />-->
 
-        <LinearLayout
+<!--            <TextView-->
+<!--                android:id="@+id/desc"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="TextView"-->
+<!--                android:textSize="20sp"-->
+<!--                tools:layout_editor_absoluteX="94dp"-->
+<!--                tools:layout_editor_absoluteY="337dp" />-->
+
+<!--        </LinearLayout>-->
+        <ListView
+            android:id="@+id/lvResults"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text"
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="94dp"
-                    tools:layout_editor_absoluteY="337dp" />
-
-            <TextView
-                android:id="@+id/desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="94dp"
-                tools:layout_editor_absoluteY="337dp" />
-
-        </LinearLayout>
-    </ScrollView>
+            android:layout_height="wrap_content"/>
 </LinearLayout>
