@@ -27,7 +27,10 @@ public class ParkingAdapter extends ArrayAdapter<Parking> {
         }
 
         TextView tvDesc = convertView.findViewById(R.id.tvDesc);
-        tvDesc.setText(parkingSpot.getDescription() + "\n" + parkingSpot.getNotes());
+        String details = parkingSpot.getDescription() + "\n" + parkingSpot.getSpaces() +
+                "\n" + parkingSpot.getGeoLocalArea() + "\n" + parkingSpot.getLocation() +
+                "\n" + Math.round(parkingSpot.getDistanceToDest()) + "m";
+        tvDesc.setText(details);
 
         return convertView;
     }
