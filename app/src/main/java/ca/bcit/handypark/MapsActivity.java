@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Parking> parkingResults = new ArrayList<>();
     Parking parking = null;
     String overviewPolylineString;
-    ArrayList<LatLng> path;
+    List<LatLng> path;
     private ProgressDialog pDialog;
 
 
@@ -135,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     JSONObject route1 = records.getJSONObject(0);
                     JSONObject overviewPolyline = route1.getJSONObject("overview_polyline");
                     overviewPolylineString = overviewPolyline.getString("points");
-                    path = decodePoly(overviewPolylineString);
+                    path = PolyUtil.decode(overviewPolylineString);
 
                 } catch (final JSONException e) {
 //                    Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -180,49 +181,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Attach the adapter to a ListView
 //            lv.setAdapter(adapter);
             System.out.println("post:" + destCoords[0]+":"+destCoords[1]);
-        }
-
-
-        /**
-         * Decode poly method retrieved from https://stackoverflow.com/questions/15924834/decoding-polyline-with-new-google-maps-api
-         * @param encoded
-         * @return
-         */
-        private ArrayList<LatLng> decodePoly(String encoded) {
-
-            Log.i("Location", "String received: "+encoded);
-            ArrayList<LatLng> poly = new ArrayList<LatLng>();
-            int index = 0, len = encoded.length();
-            int lat = 0, lng = 0;
-
-            while (index < len) {
-                int b, shift = 0, result = 0;
-                do {
-                    b = encoded.charAt(index++) - 63;
-                    result |= (b & 0x1f) << shift;
-                    shift += 5;
-                } while (b >= 0x20);
-                int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-                lat += dlat;
-
-                shift = 0;
-                result = 0;
-                do {
-                    b = encoded.charAt(index++) - 63;
-                    result |= (b & 0x1f) << shift;
-                    shift += 5;
-                } while (b >= 0x20);
-                int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-                lng += dlng;
-
-                LatLng p = new LatLng((((double) lat / 1E5)),(((double) lng / 1E5)));
-                poly.add(p);
-            }
-
-            for(int i=0;i<poly.size();i++){
-                Log.i("Location", "Point sent: Latitude: "+poly.get(i).latitude+" Longitude: "+poly.get(i).longitude);
-            }
-            return poly;
         }
 
     }
