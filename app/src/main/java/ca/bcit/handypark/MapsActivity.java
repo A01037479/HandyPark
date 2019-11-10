@@ -59,17 +59,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //TO DO
-        if (destName != null && destName != "") {
+        if (destName != null && !destName.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
 //                addressList = geocoder.getFromLocationName(destName, 5);
-                addressList = geocoder.getFromLocation(destCoords[0], destCoords[1], 5);
+                addressList = geocoder.getFromLocation(destCoords[0], destCoords[1], 1);
+                Address adr = addressList.get(0);
+                latLng = new LatLng(adr.getLatitude(), adr.getLongitude());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Address adr = addressList.get(0);
-            latLng = new LatLng(adr.getLatitude(), adr.getLongitude());
+
 
         }
 
