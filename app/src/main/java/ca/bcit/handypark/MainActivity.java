@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,11 +53,13 @@ public class MainActivity extends AppCompatActivity {
     // To display book titles
     private ListView lv;
     // URL to get contacts JSON
-    private static String SERVICE_URL = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=disability-parking&rows=10&facet=description&facet=notes&facet=geo_local_area";
+    private static String SERVICE_URL = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=disability-parking&rows=1000&facet=description&facet=notes&facet=geo_local_area";
     private ArrayList<Parking> parkingArrayList;
+    private ArrayList<Parking> topResultsArrayList;
     private String destName;
     private double[] destCoords = new double[2];
 //    private ArrayList<LatLng> latLngArrayList;
+    private static final int RADIUS = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,15 +84,36 @@ public class MainActivity extends AppCompatActivity {
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        //For fragments?
-//        final AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-//                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-//DO TRY CATCH
         f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
 
         f.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
+                topResultsArrayList.clear();
+//                destCoords[0] = place.getLatLng().latitude;
+//                destCoords[1] = place.getLatLng().longitude;
+                Array.set(destCoords, 0,place.getLatLng().latitude);
+                Array.set(destCoords, 1,place.getLatLng().longitude);
+                destName = place.getName();
+                Toast.makeText(MainActivity.this, destName + " " + destCoords[0]+destCoords[1], Toast.LENGTH_LONG).show();
+                System.out.println("inside"+destCoords[0]+":"+destCoords[1]);
+
+                for(Parking parking : parkingArrayList) {
+                    float distance = getDistanceToDest(parking.getCoordinates());
+                    if (distance <= RADIUS) {
+                        parking.setDistanceToDest(distance);
+                        topResultsArrayList.add(parking);
+                    }
+                }
+
+                //TO PARKING DETAILS (JSON STUFF)
+                // J S O N
+                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST", topResultsArrayList);
+                intent.putExtra("BUNDLE",args);
+                intent.putExtra("DESTINATION",destCoords);
+                startActivity(intent);
 
                 if (place.getLatLng() != null) {
                     destCoords[0] = place.getLatLng().latitude;
@@ -109,12 +134,29 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-
-        f.getView().setBackgroundColor(Color.WHITE);
-
-        parkingArrayList = new ArrayList<>();
+        parkingArrayList = new ArrayList<Parking>();
+        topResultsArrayList = new ArrayList<Parking>();
         new GetParking().execute();
 
+        System.out.println(destCoords[0]+":"+destCoords[1]);
+
+    }
+
+    /**
+     * Calculates distance between destination and a parking meter.
+     * @param parkingCoords double[]
+     * @return float
+     */
+    private float getDistanceToDest(double[] parkingCoords){
+        Location dest = new Location("");
+        Location parking = new Location("");
+        dest.setLatitude(destCoords[0]);
+        dest.setLongitude(destCoords[1]);
+//            dest.setLatitude(49.283667);
+//            dest.setLongitude(-123.114970);
+        parking.setLatitude(parkingCoords[0]);
+        parking.setLongitude(parkingCoords[1]);
+        return dest.distanceTo(parking);
     }
 
     /**
@@ -129,20 +171,19 @@ public class MainActivity extends AppCompatActivity {
             //Fragment f = getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
             //String s = f.getText().toString();
 
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-            intent.putExtra("destName", destName);
-            intent.putExtra("destCoords", destCoords);
+//            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+//            intent.putExtra("destName", destName);
+//            intent.putExtra("destCoords", destCoords);
 
 
-            //TO PARKING DETAILS (JSON STUFF)
-            // J S O N
-//            Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
-//            Bundle args = new Bundle();
-//            args.putSerializable("ARRAYLIST", parkingArrayList);
-//            intent.putExtra("BUNDLE",args);
-//            startActivity(intent);
+
+
+
         }
+
+
     };
+
 
     /**
      * Async task class to get json by making HTTP call
@@ -237,7 +278,10 @@ public class MainActivity extends AppCompatActivity {
 
             // Attach the adapter to a ListView
 //            lv.setAdapter(adapter);
+            System.out.println("post:" + destCoords[0]+":"+destCoords[1]);
         }
+
+
     }
 
 }
