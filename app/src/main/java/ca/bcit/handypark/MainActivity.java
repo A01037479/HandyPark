@@ -124,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, destName + " "
                         + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
-                intent.putExtra("destName", destName);
-                intent.putExtra("destCoords", destCoords);
+//                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
+//                intent.putExtra("destName", destName);
+//                intent.putExtra("destCoords", destCoords);
             }
 
             @Override
