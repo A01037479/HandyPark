@@ -3,11 +3,15 @@ package ca.bcit.handypark;
 import androidx.constraintlayout.solver.widgets.Helper;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +21,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +38,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng latLng;
     ArrayList<Parking> parkingResults = new ArrayList<>();
     Parking parking = null;
+    String overviewPolylineString;
+    ArrayList<LatLng> path;
+    private ProgressDialog pDialog;
 
 
     @Override
@@ -51,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         destCoords = intent.getDoubleArrayExtra("DESTINATION");
         int index = (Integer)intent.getExtras().get("INDEX");
         parking = parkingResults.get(index);
-
+        new MapsActivity.GetLatLng().execute();
 
 
 
@@ -81,13 +92,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(destinationLatLng).title("Destination")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-        List<LatLng> wayPoints = new ArrayList<>();
-        wayPoints.add(destinationLatLng);
-        wayPoints.add(parkingLatLng);
+
         PolylineOptions polyOptions = new PolylineOptions();
         polyOptions.color(Color.RED);
-        polyOptions.width(5);
-        polyOptions.addAll(wayPoints);
+        polyOptions.width(20);
+
+        //      draw polyline
+        for (LatLng wayPoint : path){
+            polyOptions.add(wayPoint);
+        }
 
         mMap.addPolyline(polyOptions);
 
@@ -97,4 +110,120 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, 16.0f));
     }
 
+    private class GetLatLng extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MapsActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            String jsonStr = null;
+
+            jsonStr = sh.makeServiceCall("https://maps.googleapis.com/maps/api/directions/json?origin=49.291635%2C-123.135596&destination=49.283667%2C-123.114970&waypoints=49.291635%2C-123.135596&key=AIzaSyAiFeaOtV-cX_lmLqPQJmjtbZ0IgF7y2iI");
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    JSONArray records = jsonObj.getJSONArray("routes");
+                    JSONObject route1 = records.getJSONObject(0);
+                    JSONObject overviewPolyline = route1.getJSONObject("overview_polyline");
+                    overviewPolylineString = overviewPolyline.getString("points");
+                    path = decodePoly(overviewPolylineString);
+
+                } catch (final JSONException e) {
+//                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+                }
+            } else {
+//                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
+
+//            ParkingAdapter adapter = new ParkingAdapter(MainActivity.this, parkingArrayList);
+
+            // Attach the adapter to a ListView
+//            lv.setAdapter(adapter);
+            System.out.println("post:" + destCoords[0]+":"+destCoords[1]);
+        }
+
+
+        /**
+         * Decode poly method retrieved from https://stackoverflow.com/questions/15924834/decoding-polyline-with-new-google-maps-api
+         * @param encoded
+         * @return
+         */
+        private ArrayList<LatLng> decodePoly(String encoded) {
+
+            Log.i("Location", "String received: "+encoded);
+            ArrayList<LatLng> poly = new ArrayList<LatLng>();
+            int index = 0, len = encoded.length();
+            int lat = 0, lng = 0;
+
+            while (index < len) {
+                int b, shift = 0, result = 0;
+                do {
+                    b = encoded.charAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lat += dlat;
+
+                shift = 0;
+                result = 0;
+                do {
+                    b = encoded.charAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lng += dlng;
+
+                LatLng p = new LatLng((((double) lat / 1E5)),(((double) lng / 1E5)));
+                poly.add(p);
+            }
+
+            for(int i=0;i<poly.size();i++){
+                Log.i("Location", "Point sent: Latitude: "+poly.get(i).latitude+" Longitude: "+poly.get(i).longitude);
+            }
+            return poly;
+        }
+
+    }
 }
