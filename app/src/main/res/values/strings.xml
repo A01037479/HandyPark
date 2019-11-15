@@ -3,4 +3,6 @@
     <string name="etSearch">Enter Your Destination</string>
     <string name="btnSearch">Search</string>
     <string name="title_activity_maps">Map</string>
+    <string name="baseUrl">https://www.google.com/maps/dir/?api=1&amp;origin=&amp;waypoints=</string>
+    <string name="destUrl">&amp;destination=</string>
 </resources>
