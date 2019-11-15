@@ -19,18 +19,18 @@
             android:scaleType="centerCrop"
             android:src="@drawable/fadebackground"/>
 
-        <EditText
-            android:id="@+id/etDestination"
-            android:layout_width="329dp"
-            android:layout_height="42dp"
-            android:background="#CCCCCC"
-            android:ems="12"
-            android:layout_gravity="center"
-            android:hint="@string/etSearch"
-            android:inputType="text">
+<!--        <EditText-->
+<!--            android:id="@+id/etDestination"-->
+<!--            android:layout_width="329dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:background="#CCCCCC"-->
+<!--            android:ems="12"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:hint="@string/etSearch"-->
+<!--            android:inputType="text">-->
 
             <!--        <requestFocus />-->
-        </EditText>
+<!--        </EditText>-->
 
         <fragment
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
@@ -38,13 +38,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:layout_gravity="center"
-            android:text="@string/btnSearch"/>
+<!--        <Button-->
+<!--            android:id="@+id/btnSearch"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="70dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="@string/btnSearch"/>-->
 
     </FrameLayout>
 

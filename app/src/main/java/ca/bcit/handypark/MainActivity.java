@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -64,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btnSearch = findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(btnLstnr);
+//        Button btnSearch = findViewById(R.id.btnSearch);
+//        btnSearch.setOnClickListener(btnLstnr);
 
 
         String apiKey = getString(R.string.google_maps_key);
+        System.out.println("API KEY!!!!!!!!!!!" + R.string.google_maps_key);
 
         // Initialize the SDK
         if(!Places.isInitialized()){
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         PlacesClient placesClient = Places.createClient(this);
 
         // TO DO -- Null pointer exception LINE 82 in MAIN ACTIVITY
-        final AutocompleteSupportFragment f = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        final AutocompleteSupportFragment f = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         f.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
 
@@ -112,6 +115,18 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("DESTINATION",destCoords);
                 startActivity(intent);
 
+                if (place.getLatLng() != null) {
+                    destCoords[0] = place.getLatLng().latitude;
+                    destCoords[1] = place.getLatLng().longitude;
+                    destName = place.getName();
+                }
+
+                Toast.makeText(MainActivity.this, destName + " "
+                        + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
+
+//                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
+//                intent.putExtra("destName", destName);
+//                intent.putExtra("destCoords", destCoords);
             }
 
             @Override
@@ -122,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
         parkingArrayList = new ArrayList<Parking>();
         topResultsArrayList = new ArrayList<Parking>();
         new GetParking().execute();
-//        lv = findViewById(R.id.toonList);
-//        new GetContacts().execute();
 
         System.out.println(destCoords[0]+":"+destCoords[1]);
 
