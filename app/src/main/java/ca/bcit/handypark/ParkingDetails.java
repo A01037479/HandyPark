@@ -44,9 +44,6 @@ public class ParkingDetails extends AppCompatActivity {
                 intent.putExtra("BUNDLE",args);
                 intent.putExtra("DESTINATION",destCoords);
                 startActivity(intent);
-
-
-
             }
         });
 
@@ -57,28 +54,6 @@ public class ParkingDetails extends AppCompatActivity {
             ParkingAdapter adapter = new ParkingAdapter(ParkingDetails.this, parkingSpots);
             lvResults.setAdapter(adapter);
         }
-
-
-
-
-//        int index = (Integer) getIntent().getExtras().get("index");
-
-//        Parking parkingSpot = parkingSpots.get(0);
-//        TextView text = findViewById(R.id.text);
-//        TextView desc = findViewById(R.id.desc);
-
-//        String sourceString = "<b>Description: </b>" + parkingSpot.getDescription() +
-//                "<br/><b>Notes: </b>" + parkingSpot.getNotes() +
-//                "<br/><b>Parking Spaces: </b>" + parkingSpot.getSpaces() +
-//                "<br/><b>Coordinates: </b>" +  parkingSpot.getCoordinates()[0] +
-//                ", " + parkingSpot.getCoordinates()[1] +
-//                "<br/><b>Specific Location: </b>" + parkingSpot.getLocation() +
-//                "<br/><b>Area: </b>" + parkingSpot.getGeoLocalArea() + "<br/>";
-//
-//        String descString = parkingSpot.getDescription();
-
-//        text.setText(Html.fromHtml(sourceString));
-//        desc.setText(Html.fromHtml(descString));
     }
 
 }

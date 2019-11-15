@@ -115,15 +115,15 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("DESTINATION",destCoords);
                 startActivity(intent);
 
-//                if (place.getLatLng() != null) {
-//                    destCoords[0] = place.getLatLng().latitude;
-//                    destCoords[1] = place.getLatLng().longitude;
-//                    destName = place.getName();
-//                }
+                if (place.getLatLng() != null) {
+                    destCoords[0] = place.getLatLng().latitude;
+                    destCoords[1] = place.getLatLng().longitude;
+                    destName = place.getName();
+                }
 
-//                Toast.makeText(MainActivity.this, destName + " "
-//                        + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
-//
+                Toast.makeText(MainActivity.this, destName + " "
+                        + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
+
 //                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
 //                intent.putExtra("destName", destName);
 //                intent.putExtra("destCoords", destCoords);
