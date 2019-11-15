@@ -65,11 +65,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         parking = parkingResults.get(index);
         new MapsActivity.GetLatLng().execute();
 
-
-
-
-
-
     }
 
 

@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putSerializable("ARRAYLIST", topResultsArrayList);
                 intent.putExtra("BUNDLE",args);
-                intent.putExtra("DESTINATION",destCoords);
+                intent.putExtra("DESTNAME", destName);
+                intent.putExtra("DESTCOORDS",destCoords);
                 startActivity(intent);
 
                 if (place.getLatLng() != null) {
