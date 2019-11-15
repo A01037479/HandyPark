@@ -37,13 +37,22 @@ public class ParkingDetails extends AppCompatActivity {
         lvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ParkingDetails.this, MapsActivity.class);
-                Bundle args = new Bundle();
-                args.putSerializable("ARRAYLIST", parkingSpots);
-                intent.putExtra("INDEX",i);
-                intent.putExtra("BUNDLE",args);
-                intent.putExtra("DESTINATION",destCoords);
-                startActivity(intent);
+//                Intent intent = new Intent(ParkingDetails.this, MapsActivity.class);
+//                Bundle args = new Bundle();
+//                args.putSerializable("ARRAYLIST", parkingSpots);
+//                intent.putExtra("INDEX",i);
+//                intent.putExtra("BUNDLE",args);
+//                intent.putExtra("DESTINATION",destCoords);
+//                startActivity(intent);
+
+
+                Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=49.27218,-123.069865&waypoints=49.236842,-123.159807|49.2835,-123.1153&destination=49.286148,-123.111500");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+
             }
         });
 
