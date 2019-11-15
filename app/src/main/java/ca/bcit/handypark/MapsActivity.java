@@ -127,7 +127,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             HttpHandler sh = new HttpHandler();
             String jsonStr = null;
 
-            jsonStr = sh.makeServiceCall("https://maps.googleapis.com/maps/api/directions/json?origin=49.291635%2C-123.135596&destination=49.283667%2C-123.114970&waypoints=49.291635%2C-123.135596&key=AIzaSyAiFeaOtV-cX_lmLqPQJmjtbZ0IgF7y2iI");
+            String API_KEY = getResources().getString(R.string.google_maps_key);
+            String URL = "https://maps.googleapis.com/maps/api/directions/json?origin=49.291635%2C-123.135596&destination=49.283667%2C-123.114970&waypoints=49.291635%2C-123.135596&key=" + API_KEY;
+            jsonStr = sh.makeServiceCall("https://maps.googleapis.com/maps/api/directions/json?origin=49.291635%2C-123.135596&destination=49.283667%2C-123.114970&waypoints=49.291635%2C-123.135596&key=AIzaSyBN22KOvWGxKIOeWOO9o6xknqvODqbGK60");
 
             if (jsonStr != null) {
                 try {
