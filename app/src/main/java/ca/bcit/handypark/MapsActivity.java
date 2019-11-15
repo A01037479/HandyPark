@@ -34,14 +34,8 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-<<<<<<< HEAD
-    String dest = "";
-    double lat;
-    double lng;
-=======
     double[] destCoords = new double[2];
     String destName;
->>>>>>> 17f000c95591eb25a56549d60d0176b7e16b0627
     LatLng latLng;
     ArrayList<Parking> parkingResults = new ArrayList<>();
     Parking parking = null;
@@ -59,10 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-<<<<<<< HEAD
-        Intent intent = getIntent();
-        dest = intent.getStringExtra("dest");
-=======
 //        destName = intent.getStringExtra("destName");
 //        destCoords = intent.getDoubleArrayExtra("destCoords");
 //        dest = intent.getStringExtra("dest");
@@ -80,7 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
->>>>>>> 17f000c95591eb25a56549d60d0176b7e16b0627
     }
 
 
@@ -97,44 +86,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-<<<<<<< HEAD
-        if (dest != null && dest != "") {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(dest, 5);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Address adr = addressList.get(0);
-            latLng = new LatLng(adr.getLatitude(), adr.getLongitude());
-
-        }
-
-        // East Side 500 Richards St
-        LatLng parking1 = new LatLng(49.282943, -123.11344);
-        // East Side 1100 Burrard St
-        LatLng parking2 = new LatLng(49.279453, -123.128447);
-        // East Side 1100 Homer St
-        LatLng parking3 = new LatLng(49.2753257, -123.123063);
-        // South Side 100 W Cordova St
-        LatLng parking4 = new LatLng(49.2831648, -123.108411);
-        // West Side 700 Hornby St
-        LatLng parking5 = new LatLng(49.282822, -123.121647);
-
-        mMap.addMarker(new MarkerOptions().position(latLng).title(dest));
-        mMap.addMarker(new MarkerOptions().position(parking1).title("parking" + " 1")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking2).title("parking" + " 2")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking3).title("parking" + " 3")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking4).title("parking" + " 4")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.addMarker(new MarkerOptions().position(parking5).title("parking" + " 5")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14.0f));
-=======
         LatLng parkingLatLng = new LatLng(parking.getCoordinates()[0],parking.getCoordinates()[1]);
         LatLng destinationLatLng = new LatLng(destCoords[0], destCoords[1]);
         mMap.addMarker(new MarkerOptions().position(parkingLatLng).title(parking.getLocation())
@@ -158,7 +109,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destinationLatLng, 16.0f));
->>>>>>> 17f000c95591eb25a56549d60d0176b7e16b0627
     }
 
     private class GetLatLng extends AsyncTask<Void, Void, Void> {
