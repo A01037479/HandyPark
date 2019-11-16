@@ -57,17 +57,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Parking> parkingArrayList;
     private ArrayList<Parking> topResultsArrayList;
     private String destName;
+    private String destAddress;
     private double[] destCoords = new double[2];
-//    private ArrayList<LatLng> latLngArrayList;
     private static final int RADIUS = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Button btnSearch = findViewById(R.id.btnSearch);
-//        btnSearch.setOnClickListener(btnLstnr);
-
 
         String apiKey = getString(R.string.google_maps_key);
         System.out.println("API KEY!!!!!!!!!!!" + R.string.google_maps_key);
@@ -80,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         // Create a new Places client instance
         PlacesClient placesClient = Places.createClient(this);
 
-        // TO DO -- Null pointer exception LINE 82 in MAIN ACTIVITY
         final AutocompleteSupportFragment f = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
@@ -95,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 Array.set(destCoords, 0,place.getLatLng().latitude);
                 Array.set(destCoords, 1,place.getLatLng().longitude);
                 destName = place.getName();
+                destAddress = place.getAddress();
                 Toast.makeText(MainActivity.this, destName + " " + destCoords[0]+destCoords[1], Toast.LENGTH_LONG).show();
                 System.out.println("inside"+destCoords[0]+":"+destCoords[1]);
 
@@ -112,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putSerializable("ARRAYLIST", topResultsArrayList);
                 intent.putExtra("BUNDLE",args);
-                intent.putExtra("DESTNAME", destName);
                 intent.putExtra("DESTCOORDS",destCoords);
                 startActivity(intent);
 
@@ -153,38 +149,10 @@ public class MainActivity extends AppCompatActivity {
         Location parking = new Location("");
         dest.setLatitude(destCoords[0]);
         dest.setLongitude(destCoords[1]);
-//            dest.setLatitude(49.283667);
-//            dest.setLongitude(-123.114970);
         parking.setLatitude(parkingCoords[0]);
         parking.setLongitude(parkingCoords[1]);
         return dest.distanceTo(parking);
     }
-
-    /**
-     * When "Submit" is clicked, open new intent and pass the search param.
-     */
-    private View.OnClickListener btnLstnr = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-//            EditText etDestination = findViewById(R.id.etDestination);
-//            String dest = etDestination.getText().toString();
-
-            //Fragment f = getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-            //String s = f.getText().toString();
-
-//            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//            intent.putExtra("destName", destName);
-//            intent.putExtra("destCoords", destCoords);
-
-
-
-
-
-        }
-
-
-    };
-
 
     /**
      * Async task class to get json by making HTTP call
