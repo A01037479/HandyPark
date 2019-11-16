@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ParkingDetails extends AppCompatActivity {
 
     ArrayList<Parking> parkingSpots;
-    Parking parkingSpot;
     ListView lvResults;
     double[] destCoords = new double[2];
     String googleMapsUrl = "";
@@ -31,7 +30,6 @@ public class ParkingDetails extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         destCoords = intent.getDoubleArrayExtra("DESTCOORDS");
-//        destAddress = intent.getStringExtra("DESTADDRESS");
         parkingSpots = (ArrayList<Parking>) args.getSerializable("ARRAYLIST");
         Collections.sort(parkingSpots,  Parking.COMPARE_BY_DISTANCE);
 

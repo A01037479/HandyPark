@@ -5,4 +5,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="baseUrl">https://www.google.com/maps/dir/?api=1&amp;origin=&amp;waypoints=</string>
     <string name="destUrl">&amp;destination=</string>
+    <string name="badEntryLocation">West Side 1000 Cambie St</string>
 </resources>

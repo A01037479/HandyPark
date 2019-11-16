@@ -203,7 +203,10 @@ public class MainActivity extends AppCompatActivity {
                         parkingSpot.setLocation(location);
                         parkingSpot.setGeoLocalArea(geoLocalArea);
 
-                        parkingArrayList.add(parkingSpot);
+                        if (!parkingSpot.getLocation().contains("1000 Cambie St")) {
+                            parkingArrayList.add(parkingSpot);
+                        }
+
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());

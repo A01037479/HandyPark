@@ -26,11 +26,22 @@ public class ParkingAdapter extends ArrayAdapter<Parking> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_row_layout, parent, false);
         }
 
-        TextView tvDesc = convertView.findViewById(R.id.tvDesc);
-        String details = parkingSpot.getDescription() + "\n" + parkingSpot.getSpaces() +
-                "\n" + parkingSpot.getGeoLocalArea() + "\n" + parkingSpot.getLocation() +
-                "\n" + Math.round(parkingSpot.getDistanceToDest()) + "m";
-        tvDesc.setText(details);
+        TextView tvDesc1 = convertView.findViewById(R.id.tvDesc1);
+        TextView tvDesc2 = convertView.findViewById(R.id.tvDesc2);
+        TextView tvDesc3 = convertView.findViewById(R.id.tvDesc3);
+        TextView tvDesc4 = convertView.findViewById(R.id.tvDesc4);
+//        String details = parkingSpot.getDescription() + "\nSpaces: " + parkingSpot.getSpaces() +
+//                "\n" + parkingSpot.getGeoLocalArea() + "\n" + parkingSpot.getLocation() +
+//                "\n" + Math.round(parkingSpot.getDistanceToDest()) + "m";
+        if(parkingSpot.getDescription().contains("meter")){
+            tvDesc3.setText("Meter parking");
+        }
+        else{
+            tvDesc3.setText("Free parking");
+        }
+        tvDesc1.setText(parkingSpot.getLocation());
+        tvDesc2.setText("Spaces: " + parkingSpot.getSpaces());
+        tvDesc4.setText(""+Math.round(parkingSpot.getDistanceToDest())+" m");
 
         return convertView;
     }
