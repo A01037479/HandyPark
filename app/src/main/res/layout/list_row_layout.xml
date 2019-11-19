@@ -6,19 +6,41 @@
     android:minHeight="50dp"
     android:padding="8dp"
     android:background="#f0f0f0">
-
-
-    <TextView
+    <TableLayout
         android:id="@+id/tvDesc"
         android:layout_gravity="center"
-        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:background="@drawable/listview_shadow"/>
-
-
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:background="@drawable/listview_shadow">
+        <TextView
+            android:id="@+id/tvDesc1"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvDesc3"
+            android:textSize="21sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TableRow>
+            <TextView
+                android:id="@+id/tvDesc2"
+                android:textSize="21sp"
+                android:layout_weight="5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvDesc4"
+                android:textSize="21sp"
+                android:gravity="right"
+                android:layout_weight="5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+    </TableLayout>
 </LinearLayout>
