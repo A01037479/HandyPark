@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private String destName;
     private String destAddress;
     private double[] destCoords = new double[2];
-    private static final int RADIUS = 1000;
+    private static final int RADIUS = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 Array.set(destCoords, 1,place.getLatLng().longitude);
                 destName = place.getName();
                 destAddress = place.getAddress();
-                Toast.makeText(MainActivity.this, destName + " " + destCoords[0]+destCoords[1], Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, destName + " " + destCoords[0]+destCoords[1], Toast.LENGTH_LONG).show();
                 System.out.println("inside"+destCoords[0]+":"+destCoords[1]);
 
                 for(Parking parking : parkingArrayList) {
@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 args.putSerializable("ARRAYLIST", topResultsArrayList);
                 intent.putExtra("BUNDLE",args);
                 intent.putExtra("DESTCOORDS",destCoords);
+                intent.putExtra("RADIUS", 1000);
                 startActivity(intent);
 
                 if (place.getLatLng() != null) {
@@ -118,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
                     destName = place.getName();
                 }
 
-                Toast.makeText(MainActivity.this, destName + " "
-                        + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, destName + " "
+//                        + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
 
 //                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
 //                intent.putExtra("destName", destName);
@@ -213,10 +214,10 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
+//                            Toast.makeText(getApplicationContext(),
+//                                    "Json parsing error: " + e.getMessage(),
+//                                    Toast.LENGTH_LONG)
+//                                    .show();
                         }
                     });
                 }
@@ -225,10 +226,10 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
+//                        Toast.makeText(getApplicationContext(),
+//                                "Couldn't get json from server. Check LogCat for possible errors!",
+//                                Toast.LENGTH_LONG)
+//                                .show();
                     }
                 });
 
