@@ -73,9 +73,9 @@ public class ParkingDetails extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String radiusSelection = spinnerRadius.getSelectedItem().toString();
                 System.out.println("Selected " + radiusSelection);
-                if (radiusSelection.equals("1km"))
+                if (radiusSelection.equals("1 Km"))
                     radius = 1000;
-                else if (radiusSelection.equals("3km"))
+                else if (radiusSelection.equals("3 Km"))
                     radius = 3000;
                 else
                     radius = 5000;
@@ -93,6 +93,7 @@ public class ParkingDetails extends AppCompatActivity {
                 intent.putExtra("RADIUS", radius);
                 finish();
                 startActivity(intent);
+                System.out.println(radius+"----------------------------------------");
             }
         });
         lvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
