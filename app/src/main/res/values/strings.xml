@@ -5,8 +5,14 @@
     <string name="title_activity_maps">Map</string>
     <string name="baseUrl">https://www.google.com/maps/dir/?api=1&amp;origin=&amp;waypoints=</string>
     <string name="destUrl">&amp;destination=</string>
-    <string name="badEntryLocation">West Side 1000 Cambie St</string>
+    <string name="badEntryLocation">1000 Cambie St</string>
     <string name="select_radius">Filter</string>
+    <string name="meter">meter</string>
+    <string name="freeParking">Free Parking</string>
+    <string name="meterParking">Meter Parking</string>
+    <string name="metreDistance"> m</string>
+    <string name="spacesDesc">Spaces: </string>
+    <string name="noResults">No results found for selected destination within the radius.</string>
     <string-array name="spinnersRadius">
         <item>1 Km</item>
         <item>3 Km</item>

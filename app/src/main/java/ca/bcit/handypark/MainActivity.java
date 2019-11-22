@@ -7,25 +7,16 @@ import androidx.fragment.app.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
+
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
+
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -36,11 +27,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private static String SERVICE_URL = "https://opendata.vancouver.ca/api/records/1.0/search/?dataset=disability-parking&rows=1000&facet=description&facet=notes&facet=geo_local_area";
     private ArrayList<Parking> parkingArrayList;
     private ArrayList<Parking> topResultsArrayList;
-    private String destName;
-    private String destAddress;
+    private String destName = "";
+    private String destAddress = "";
     private double[] destCoords = new double[2];
     private static final int RADIUS = 5000;
 
@@ -67,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String apiKey = getString(R.string.google_maps_key);
-        System.out.println("API KEY!!!!!!!!!!!" + R.string.google_maps_key);
 
         // Initialize the SDK
         if(!Places.isInitialized()){
@@ -119,12 +107,6 @@ public class MainActivity extends AppCompatActivity {
                     destName = place.getName();
                 }
 
-//                Toast.makeText(MainActivity.this, destName + " "
-//                        + destCoords[0] + ", " + destCoords[1], Toast.LENGTH_LONG).show();
-
-//                Intent intent = new Intent(MainActivity.this, ParkingDetails.class);
-//                intent.putExtra("destName", destName);
-//                intent.putExtra("destCoords", destCoords);
             }
 
             @Override
@@ -204,7 +186,9 @@ public class MainActivity extends AppCompatActivity {
                         parkingSpot.setLocation(location);
                         parkingSpot.setGeoLocalArea(geoLocalArea);
 
-                        if (!parkingSpot.getLocation().contains("1000 Cambie St")) {
+                        // Entry with incorrect address value that defaults to the Cambie bridge
+                        String badEntryLocation = getString(R.string.badEntryLocation);
+                        if (!parkingSpot.getLocation().contains(badEntryLocation)) {
                             parkingArrayList.add(parkingSpot);
                         }
 
@@ -245,12 +229,6 @@ public class MainActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
-            //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
-
-//            ParkingAdapter adapter = new ParkingAdapter(MainActivity.this, parkingArrayList);
-
-            // Attach the adapter to a ListView
-//            lv.setAdapter(adapter);
             System.out.println("post:" + destCoords[0]+":"+destCoords[1]);
         }
 

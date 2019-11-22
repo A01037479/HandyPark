@@ -93,7 +93,6 @@ public class ParkingDetails extends AppCompatActivity {
                 intent.putExtra("RADIUS", radius);
                 finish();
                 startActivity(intent);
-                System.out.println(radius+"----------------------------------------");
             }
         });
         lvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,7 +108,7 @@ public class ParkingDetails extends AppCompatActivity {
         });
 
         if(parkingSpots.isEmpty()) {
-            tvNoResults.setText("No results found for selected destination within the radius.");
+            tvNoResults.setText(getString(R.string.noResults));
             tvNoResults.setVisibility(View.VISIBLE);
 //            Toast.makeText(ParkingDetails.this,
 //                    "No matched results found for selected destination", Toast.LENGTH_LONG).show();

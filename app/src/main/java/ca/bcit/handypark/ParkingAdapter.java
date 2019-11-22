@@ -26,22 +26,26 @@ public class ParkingAdapter extends ArrayAdapter<Parking> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_row_layout, parent, false);
         }
 
-        TextView tvDesc1 = convertView.findViewById(R.id.tvDesc1);
-        TextView tvDesc2 = convertView.findViewById(R.id.tvDesc2);
-        TextView tvDesc3 = convertView.findViewById(R.id.tvDesc3);
-        TextView tvDesc4 = convertView.findViewById(R.id.tvDesc4);
-//        String details = parkingSpot.getDescription() + "\nSpaces: " + parkingSpot.getSpaces() +
-//                "\n" + parkingSpot.getGeoLocalArea() + "\n" + parkingSpot.getLocation() +
-//                "\n" + Math.round(parkingSpot.getDistanceToDest()) + "m";
-        if(parkingSpot.getDescription().contains("meter")){
-            tvDesc3.setText("Meter parking");
+        TextView tvParkingLocation = convertView.findViewById(R.id.tvParkingLocation);
+        TextView tvParkingSpaces = convertView.findViewById(R.id.tvParkingSpaces);
+        TextView tvMeterOrFree = convertView.findViewById(R.id.tvMeterOrFree);
+        TextView tvDistanceFromDest = convertView.findViewById(R.id.tvDistanceFromDest);
+
+        String meter = convertView.getContext().getString(R.string.meter);
+
+        if(parkingSpot.getDescription().contains(meter)){
+            tvMeterOrFree.setText(convertView.getContext().getString(R.string.meterParking));
+        } else{
+            tvMeterOrFree.setText(convertView.getContext().getString(R.string.freeParking));
         }
-        else{
-            tvDesc3.setText("Free parking");
-        }
-        tvDesc1.setText(parkingSpot.getLocation());
-        tvDesc2.setText("Spaces: " + parkingSpot.getSpaces());
-        tvDesc4.setText(""+Math.round(parkingSpot.getDistanceToDest())+" m");
+
+        tvParkingLocation.setText(parkingSpot.getLocation());
+        String spacesDesc = convertView.getContext().getString(R.string.spacesDesc)
+                + parkingSpot.getSpaces();
+        tvParkingSpaces.setText(spacesDesc);
+        String distanceFromDest = Math.round(parkingSpot.getDistanceToDest()) +
+                convertView.getContext().getString(R.string.metreDistance);
+        tvDistanceFromDest.setText(distanceFromDest);
 
         return convertView;
     }
